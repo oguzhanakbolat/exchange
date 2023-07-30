@@ -1,25 +1,29 @@
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
 import React from 'react';
 import { Eur, Usd } from '../constans/icons';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
 const Parite = ({ eur, usd}) => {
+    const { navigate } = useNavigation();
   return (
-    <View style={styles.container}>
-        <View style={styles.iconContainers}>
+    <TouchableOpacity onPress={() => navigate('Parite')}>
+        <View style={styles.container}>
+            <View style={styles.iconContainers}>
+                <View>
+                    <Usd color="#fffa" size="42"/>
+                </View>
+                <View style={styles.iconContainer}>
+                    <Eur color="#fff" size="52"/>
+                </View>
+            </View>
             <View>
-                <Usd color="#fffa" size="42"/>
-            </View>
-            <View style={styles.iconContainer}>
-                <Eur color="#fff" size="52"/>
+                <Text style={styles.title}>Dolar/ Euro Paritesi</Text>
+                <Text style={styles.text}>{(usd?.sales / eur?.sales).toFixed(4)} TL</Text>
             </View>
         </View>
-        <View>
-            <Text style={styles.title}>Dolar/ Euro Paritesi</Text>
-            <Text style={styles.text}>{(usd?.sales / eur?.sales).toFixed(4)} TL</Text>
-        </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 

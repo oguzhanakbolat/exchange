@@ -1,27 +1,30 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
-import MoneyIcons from './MoneyIcons'
+import { useNavigation } from '@react-navigation/native';
 
 const Exchange = ({ data }) => {
+    const navigation = useNavigation();
     
   return (
-    <View style={styles.container}>
-        <View style={styles.iconContianer}>
-            <Image style={styles.icon} source={{uri: data.icon}} />
+    <TouchableOpacity onPress={() => navigation.navigate('Detail', { symbol: data.symbol })}>
+        <View style={styles.container}>
+            <View style={styles.iconContianer}>
+                <Image style={styles.icon} source={{uri: data.icon}} />
+            </View>
+            <View style={styles.title}>
+                <Text style={styles.symbol}>{data.symbol}</Text>
+                <Text style={styles.name}>{data.name}</Text>
+            </View>
+            <View style={styles.exchagne}>
+                <Text style={styles.text}>Alış</Text>
+                <Text style={styles.price}>{data.buying}</Text>
+            </View>
+            <View style={styles.exchagne}>
+                <Text style={styles.text}>Satış</Text>
+                <Text style={styles.price}>{data.sales}</Text>
+            </View>
         </View>
-        <View style={styles.title}>
-            <Text style={styles.symbol}>{data.symbol}</Text>
-            <Text style={styles.name}>{data.name}</Text>
-        </View>
-        <View style={styles.exchagne}>
-            <Text style={styles.text}>Alış</Text>
-            <Text style={styles.price}>{data.buying}</Text>
-        </View>
-        <View style={styles.exchagne}>
-            <Text style={styles.text}>Satış</Text>
-            <Text style={styles.price}>{data.sales}</Text>
-        </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
