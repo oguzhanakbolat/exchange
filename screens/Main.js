@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Exchange from '../components/Exchange';
 import Usd from '../constans/icons/usd';
 
@@ -19,16 +19,19 @@ export default function MainScreen() {
   const insets = useSafeAreaInsets()
   const { navigate } = useNavigation();
   const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getData = async () => {
+    setLoading(true);
     const res = await getExchange();
 
-    if(res.data.length > 0) {
-      const newList = res.data.map(item => ({
+    if(res.success) {
+      const newList = res.data.data.map(item => ({
         ...item,
         buying: formatMoney(item.buying),
         sales: formatMoney(item.sales)
       }));
+
       AsyncStorage.setItem('exchange', JSON.stringify(newList));
       setList(newList);
     }
@@ -38,6 +41,7 @@ export default function MainScreen() {
         setList(JSON.parse(data));
       }
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -54,7 +58,12 @@ export default function MainScreen() {
             <Usd size="600" color="red"/>
           </View>
           {
-            list.length === 0 ? <Text>Yükleniyor...</Text> : 
+          loading ?
+          <View style={styles.loading}>
+            <ActivityIndicator size="large" color="#000" />
+            <Text>Yükleniyor...</Text>
+          </View>
+          : 
             <>
           <TopExchange eur={list[1]} usd={list[0]}  />
           <Parite eur={list[1]} usd={list[0]}/>
@@ -125,5 +134,11 @@ const styles = StyleSheet.create({
     width: width / 5,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+
   }
 });
