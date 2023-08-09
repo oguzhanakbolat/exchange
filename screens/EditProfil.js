@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, na } from 'react-native';
+import { useAuth } from '../contextAPI/useAuth';
 
 const EditProfil = ({ navigation }) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const { logout, user } = useContext(useAuth);
+
+
+  const [username, setUsername] = useState(user?.username || "");
+  const [email, setEmail] = useState(user?.email || "");
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
   const handleSave = () => {
+
     // Kullanıcının güncellenmiş bilgilerini kaydetmek için bir işlem yapabilirsiniz.
     // Örnek olarak, burada bir API çağrısı yapabilirsiniz.
     
