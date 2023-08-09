@@ -1,8 +1,20 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const Exchange = ({ data }) => {
+const PariteExchange = ({
+  data,
+  enteredValue,
+  handleInputChange,
+  handleReset,
+}) => {
   const navigation = useNavigation();
 
   return (
@@ -17,20 +29,28 @@ const Exchange = ({ data }) => {
           <Text style={styles.symbol}>{data.symbol}</Text>
           <Text style={styles.name}>{data.name}</Text>
         </View>
-          <View style={styles.exchagne}>
-            <Text style={styles.text}>Alış</Text>
-            <Text style={styles.price}>{data.buying}</Text>
-          </View>
+
         <View style={styles.exchagne}>
           <Text style={styles.text}>Satış</Text>
           <Text style={styles.price}>{data.sales}</Text>
+        </View>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            onFocus={handleReset}
+            style={styles.input}
+            onChangeText={(text) => handleInputChange(Number(text), data.symbol)}
+            value={enteredValue}
+            keyboardType="numeric"
+            placeholder="Değer Giriniz"
+          />
         </View>
       </View>
     </TouchableOpacity>
   );
 };
 
-export default Exchange;
+export default PariteExchange;
 
 const styles = StyleSheet.create({
   container: {
@@ -80,5 +100,20 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 14,
     fontWeight: "300",
+  },
+  inputContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  input: {
+    width: 100,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    marginLeft: 5,
   },
 });
