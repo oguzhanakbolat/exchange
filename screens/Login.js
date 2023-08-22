@@ -7,7 +7,8 @@ import Password from '../constans/icons/password';
 import { loginService } from '../service'
 import { useNavigation } from '@react-navigation/native'
 import * as yup from 'yup';
-import { useAuth } from '../contextAPI/useAuth'
+import { useDispatch } from 'react-redux';
+import { login } from '../store/userSlice';
 
 const LoginSchema = yup.object().shape({
     email: yup
@@ -23,53 +24,64 @@ const LoginSchema = yup.object().shape({
 });
 
 const LoginScreen = () => {
+    const dispatch = useDispatch();
     const { navigate } = useNavigation();
-    const { login } = useContext(useAuth);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const onLogin = async() => {
         LoginSchema.validate({ email, password })
             .then(async() => {
-                login({ identifier: email, password }, navigate);
+
+                const res = await loginService({ identifier: email, password });
+                if(res.status) {
+                   
+                    dispatch(login({
+                        user: res.user,
+                        status: true
+                    }))
+                    // navigate('Main');
+                }
+
+
             })
             .catch((err) => {
                 Alert.alert('Hata', err.errors[0]);
             });
     }
 
-  return (
-    <SafeAreaView style={styles.safe}>
-        <View style={styles.container}>
-            <Image source={require('../images/login.png')} />
-            <Text style={styles.title}>Giriş</Text>
+    return (
+        <SafeAreaView style={styles.safe}>
+            <View style={styles.container}>
+                <Image source={require('../images/login.png')} />
+                <Text style={styles.title}>Giriş</Text>
 
-            <LoginInput
-                lowerCase
-                placeholder="E-Posta Adresi"
-                leftIcon={<EMailIcon size={18} color="#6592C9"/>}
-                value={email}
-                setValue={setEmail}
-            />
+                <LoginInput
+                    lowerCase
+                    placeholder="E-Posta Adresi"
+                    leftIcon={<EMailIcon size={18} color="#6592C9"/>}
+                    value={email}
+                    setValue={setEmail}
+                />
 
-            <LoginInput
-                secure
-                placeholder="Şifre"
-                leftIcon={<Password size={18} color="#6592C9"/>}
-                value={password}
-                setValue={setPassword}
-            />
+                <LoginInput
+                    secure
+                    placeholder="Şifre"
+                    leftIcon={<Password size={18} color="#6592C9"/>}
+                    value={password}
+                    setValue={setPassword}
+                />
 
-            <TouchableOpacity style={styles.button} onPress={onLogin}>
-                <Text style={styles.buttonText}>Giriş Yap</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={onLogin}>
+                    <Text style={styles.buttonText}>Giriş Yap</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigate('Register')}>
-                <Text style={styles.registerButton}>Hesabınız yok mu? Kayıt olun.</Text>
-            </TouchableOpacity>
-        </View>
-    </SafeAreaView>
-  )
+                <TouchableOpacity onPress={() => navigate('Register')}>
+                    <Text style={styles.registerButton}>Hesabınız yok mu? Kayıt olun.</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
+    )
 }
 
 export default LoginScreen;

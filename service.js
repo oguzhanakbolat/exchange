@@ -4,6 +4,7 @@ import { get, post, noTokenApi, api } from "./constans/conf/axios";
 const apiURL = {
     exchange: "/exchanges",
     exchangeDetail: "/exchanges/",
+    me: "/users/me",
 }
 
 const noTokenApiURL = {
@@ -53,4 +54,6 @@ const registerService = async (data) => {
     }
 }
 
-export { getExchange, getExchangeDetail, loginService, registerService };
+const getMe = async () => await api.get(apiURL.me);
+
+export { getExchange, getExchangeDetail, loginService, registerService, getMe };

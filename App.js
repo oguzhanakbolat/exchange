@@ -1,29 +1,53 @@
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { enableScreens } from 'react-native-screens';
-import { useEffect, useState } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import { Provider } from 'react-redux';
 
-import { api } from './constans/conf/axios';
-import { AuthProvider } from './contextAPI/useAuth';
 import RooNavigation from './navigation/root';
 
+import Toast from './layout/Toast';
+import { useEffect } from 'react';
+import useFonts from './constans/fonts';
+import { store } from './store';
+
 enableScreens();
-const Stack = createNativeStackNavigator();
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+
+
+
+  const loadApp = async () => {
+    try {
+      await useFonts();
+    }
+    catch (e) {
+      console.warn(e);
+    }
+    finally {
+      await SplashScreen.hideAsync();
+    }
+  };
+
+  useEffect(() => {
+    loadApp();
+  }, []);
+
   return (
-    <SafeAreaProvider>
-      <LinearGradient
-        colors={['#f005', 'transparent']}
-        style={styles.background}
-      />
-      <AuthProvider>
-        <RooNavigation />
-      </AuthProvider>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <Toast>
+          <LinearGradient
+            colors={['#f005', 'transparent']}
+            style={styles.background}
+          />
+          <RooNavigation />
+        </Toast>
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 

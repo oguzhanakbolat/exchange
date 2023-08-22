@@ -3,7 +3,7 @@ import React from 'react'
 
 const SettingsScreen = () => {
   return (
-    <View>
+    <View  style={{ justifyContent: 'center', alignItems: 'center', flex: 1}}>
       <Text>SettingsScreen</Text>
     </View>
   )

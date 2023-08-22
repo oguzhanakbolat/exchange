@@ -1,18 +1,19 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { useNavigation } from '@react-navigation/native';
 
 const Exchange = ({ data }) => {
     const navigation = useNavigation();
-    
+
     return (
         <TouchableOpacity onPress={() => navigation.navigate('Detail', { symbol: data.symbol })}>
             <View style={styles.container}>
-                <View style={styles.iconContianer}>
-                    <Image style={styles.icon} source={{uri: data.icon}} />
-                </View>
                 <View style={styles.title}>
-                    <Text style={styles.symbol}>{data.symbol}</Text>
+                    <View style={styles.iconContianer}>
+                        <Image style={styles.icon} source={{uri: 'https://www.tcmb.gov.tr/kurlar/kurlar_tr_dosyalar/images/' + data.symbol+ '.gif'}} />
+                        <Text style={styles.symbol}>{data.symbol}</Text>
+                    </View>
+                    
                     <Text style={styles.name}>{data.name}</Text>
                 </View>
                 <View style={styles.exchagne}>
@@ -28,7 +29,16 @@ const Exchange = ({ data }) => {
     )
 }
 
-export default Exchange;
+export default memo(Exchange, (prevProps, nextProps) => {
+    if(prevProps.data.buying !== nextProps.data.buying) {
+        return false;
+    }
+    if(prevProps.data.sales !== nextProps.data.sales) {
+        return false;
+    }
+
+    return true;
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -37,21 +47,18 @@ const styles = StyleSheet.create({
         borderBottomColor: '#aaa',
         borderBottomWidth: 1,
         paddingVertical: 8,
-
     },
     iconContianer: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        backgroundColor: '#222',
-        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        marginRight: 16,
     },
 
     icon: {
-        width: 48,
-        height: 48,
+        width: 16,
+        height: 16,
+        marginRight: 8,
     },
     title: {
         flex: 1,
@@ -59,11 +66,12 @@ const styles = StyleSheet.create({
     },
     symbol: {
         fontSize: 21,
-        fontWeight: '700',
         marginBottom: 4,
+        fontFamily: 'Rubik_600SemiBold'
     },
     name: {
         fontSize: 12,
+        fontFamily: 'ShadowsIntoLight_400Regular',
     },
     exchagne: {
         marginLeft: 16,

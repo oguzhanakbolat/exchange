@@ -7,7 +7,7 @@ export const noTokenApi = axios.create({ baseURL });
 
 api.interceptors.request.use(
     request => {
-        return { ...request, language: 'tr'};
+        return { ...request, language: 'tr', deneme: 'deneme'};
     },
     error => Promise.reject(error)
 );

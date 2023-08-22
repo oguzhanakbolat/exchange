@@ -1,32 +1,85 @@
-import { View, Text, Touchable, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useContext } from 'react'
+import { View, Animated, Text, Touchable, TouchableOpacity, StyleSheet, Easing } from 'react-native'
+import React, { useContext, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { api } from '../constans/conf/axios'
 import { useNavigation } from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useAuth } from '../contextAPI/useAuth'
+
 
 const AboutScreen = () => {
-  const { navigate } = useNavigation();
-  const { logout, user } = useContext(useAuth);
+  const mLeft = useRef(new Animated.Value(0)).current;
+  const bRadius = useRef(new Animated.Value(0)).current;
+  const w = useRef(new Animated.Value(0)).current;
+  const color = useRef(new Animated.Value(0)).current;
 
-  console.log(user)
+  const go = () => {
+    Animated.sequence([
+
+      Animated.timing(w, {
+        toValue: 100,
+        duration: 3000,
+        useNativeDriver: false,
+      }),
+      Animated.timing(mLeft, {
+        toValue: 294,
+        duration: 1000,
+        easing: Easing.elastic(2, 1),
+        useNativeDriver: false,
+      }),
+  
+      Animated.timing(bRadius, {
+        toValue: 0,
+        duration: 3000,
+        useNativeDriver: false,
+      }),
+  
+    ]).start();
+
+  };
+
+  const come = () => {
+    Animated.parallel([
+      Animated.timing(mLeft, {
+        toValue: 0,
+        duration: 3000,
+        useNativeDriver: false,
+      }),
+      Animated.timing(bRadius, {
+        toValue: 50,
+        duration: 3000,
+        useNativeDriver: false,
+      }),
+      Animated.timing(w, {
+        toValue: 0,
+        duration: 3000,
+        useNativeDriver: false,
+      })
+
+    ]).start();
+  }
+
 
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        <View style={styles.item}>
-          <Text>{ user.username}</Text>
-        </View>
-        <View style={styles.item}>
-          <Text>{ user.email}</Text>
-        </View>
 
 
+      <TouchableOpacity style={styles.button} onPress={() => come()}>
+        <Text>Come</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => logout(navigate)}>
-          <Text>Çıkış</Text>
-        </TouchableOpacity>
+      <Animated.View style={[styles.box, {
+        marginLeft: mLeft,
+        borderRadius: bRadius,
+        width: w,
+        height: w,
+        
+        }]} />
+
+  
+      <TouchableOpacity style={styles.button} onPress={() => go()}>
+        <Text>Go</Text>
+      </TouchableOpacity>
+
+ 
       </View>
     </SafeAreaView>
   )
@@ -41,23 +94,17 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 16,
     backgroundColor: '#fff',
-  },
-  item: {
-    backgroundColor: '#fff',
-    borderBottomColor: '#ddd',
-    borderBottomWidth: 1,
     justifyContent: 'center',
-    height: 50,
+  },
+  box: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'red',
   },
   button: {
-    backgroundColor: '#6592C9',
-    height: 60,
-    borderRadius: 8,
-    margin: 20,
-    justifyContent: 'center',
-    alignItems: 'center'
+    width: '100%',
+    padding: 10,
+    backgroundColor: 'yellow'
   }
 })

@@ -3,13 +3,12 @@ import { api } from "../constans/conf/axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginService } from "../service";
 
-
-
 const UseAuth = createContext();
 
 const AuthProvider = ({ children }) => {
-    const [isAuth, setIsAuth] = useState(false);
+    const [isAuth, setIsAuth] = useState(null);
     const [user, setUser] = useState(null);
+
 
     const authControl = async() => {
         const token = await AsyncStorage.getItem('jwt');
