@@ -9,8 +9,11 @@ import Parite from '../components/Parite';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { getExchange } from '../store/exchangeSlice';
+import getResStatus, { sizing } from '../utils/responsive';
 
 const { width, height } = Dimensions.get('window');
+
+
 
 export default function MainScreen() {
   const insets = useSafeAreaInsets()
@@ -46,9 +49,10 @@ export default function MainScreen() {
           <Parite eur={eur} usd={usd} />
           <FlatList
             data={exchange}
-            style={{ width: '100%' }}
+            style={{ width }}
             renderItem={({ item }) => <Exchange data={item} />}
             keyExtractor={item => item.symbol}
+            numColumns={sizing(1, 2, 3)}
           />
         </>
         }

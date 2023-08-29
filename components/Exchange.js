@@ -1,6 +1,8 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native'
 import React, { memo } from 'react'
 import { useNavigation } from '@react-navigation/native';
+
+const { width } = Dimensions.get('window');
 
 const Exchange = ({ data }) => {
     const navigation = useNavigation();
@@ -47,6 +49,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#aaa',
         borderBottomWidth: 1,
         paddingVertical: 8,
+        width: width > 414 ? width / 2 - 32 : width - 32,
     },
     iconContianer: {
         flex: 1,

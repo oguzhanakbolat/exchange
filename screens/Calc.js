@@ -1,11 +1,13 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, TouchableOpacityBase } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, Dimensions, TouchableOpacityBase, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, CameraType } from 'expo-camera';
 import * as Notifications from 'expo-notifications';
 import * as ImagePicker from 'expo-image-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-const { width } = Dimensions.get('window');
+
+const { width, height } = Dimensions.get('window');
 
 
 const CalcScreen = () => {
@@ -72,6 +74,7 @@ const CalcScreen = () => {
   
   return (
     <SafeAreaView style={{ flex: 1 }}>
+     <KeyboardAwareScrollView >
     <View style={styles.container}>
       
       {
@@ -92,9 +95,37 @@ const CalcScreen = () => {
       }
       <View style={styles.notification}>
       <TextInput
+        keyboardType='email-address'
         placeholder='Başlık'
         value={title}
         onChangeText={setTitle}
+        style={styles.title}
+      />
+      <TextInput
+        placeholder='İçerik'
+        value={description}
+        onChangeText={setDescription}
+        style={styles.title}
+      />
+      <TextInput
+        placeholder='İçerik'
+        value={description}
+        onChangeText={setDescription}
+        style={styles.title}
+      />
+      <TextInput
+        placeholder='İçerik'
+        value={description}
+        onChangeText={setDescription}
+        style={styles.title}
+      />
+
+      <View style={{ height: 200, width: '100%', backgroundColor: 'red'}}></View>
+
+      <TextInput
+        placeholder='İçerik'
+        value={description}
+        onChangeText={setDescription}
         style={styles.title}
       />
       <TextInput
@@ -142,6 +173,7 @@ const CalcScreen = () => {
       }
 
     </View>
+    </KeyboardAwareScrollView>
     </SafeAreaView>
   )
 }
@@ -213,7 +245,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    height
   },
   notification: {
     width: '100%',
